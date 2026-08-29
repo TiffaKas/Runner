@@ -1,11 +1,20 @@
 version: '3.8'
 
 services:
-  web-exe-runner:
+  exe-runner-pro:
     build: .
-    container_name: exe_runner
+    container_name: exe_runner_pro
     ports:
-      - "8080:8080"
+      - "8443:8443"
     volumes:
-      - ./apps:/app
+      - ./apps:/app/apps
+    # 算力全开配置
+    shm_size: '2gb' # 共享内存，防止 3D 渲染爆帧崩溃
+    environment:
+      - GALLIUM_DRIVER=llvmpipe
+      - LIBGL_ALWAYS_SOFTWARE=1
+    deploy:
+      resources:
+        limits:
+          cpus: '0.000' # 取消 CPU 限制，允许使用宿主机全核
     restart: always
